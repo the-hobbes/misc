@@ -1,0 +1,4 @@
+# creating a zombie process 
+
+sleep 10 &
+kill -STOP $$
