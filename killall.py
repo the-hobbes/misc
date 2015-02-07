@@ -63,7 +63,7 @@ def kill_processes(process_list):
 def main():
   target_process = read_input()
   process_list = locate_processes(target_process)
-  
+
   if len(process_list) <= 0:
     print "%s: No Processes Found" % target_process
     sys.exit(0)
@@ -72,7 +72,7 @@ def main():
   if return_code == 0:
     print '%s killed successfully.' % target_process
   else:
-    print '%s NOT killed successfully.' % target_process
+    print '%s NOT killed.' % target_process
 
 if __name__ == '__main__':
   main()
