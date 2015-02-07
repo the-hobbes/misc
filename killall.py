@@ -61,6 +61,13 @@ def kill_processes(process_list):
   return 0
 
 def main():
+  '''
+    This can be tested by using something like this:
+      watch -n 5 ls -l
+    (watch periodically runs something, in this case 'ls', every 5 seconds)
+    Then, try to: 
+      ./killall watch
+  '''
   target_process = read_input()
   process_list = locate_processes(target_process)
 
