@@ -32,6 +32,10 @@ def locate_processes(target_process):
   PID_INDEX = 0
   process_list = []
 
+  # NOTE: instead of iterating through each directory, we could iterate through
+  # just the numerical ones by using a regular expression:
+  # /proc/[0-9]*/ would work
+
   process_directories = subprocess.Popen(['ls', BASE_DIR], stdout=subprocess.PIPE)
 
   for directory in process_directories.stdout:
