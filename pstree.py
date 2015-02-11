@@ -113,6 +113,9 @@ def get_processes():
 	process_directories = []
 	proc = subprocess.Popen(['ls', '/proc/'], stdout=subprocess.PIPE)
 	
+  # NOTE: instead of using a cast, it would be much better to use a regular
+  # expression to just grab the numerical directories:
+  # /proc/[0-9]*/ would do the trick.
 	for line in proc.stdout:
 		try:
 			process_directories.append(int(line))
