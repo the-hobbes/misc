@@ -1,0 +1,17 @@
+# As this is a function, it can be sourced like so:
+# . ./cruddaccess
+# Then run like so:
+# cruddaccess hostname
+cruddaccess () {
+  if [ $# -lt 1 ]
+  then
+    echo "Usage: cruddaccess hostname"
+    return 1
+  elif [ $# -gt 1 ]
+  then
+    echo "Too many arguments."
+    echo "Usage: cruddaccess hostname"
+    return 2
+  fi
+  open http://$(echo "$1" | sed 's/.some.domain.com//g')some.domain.com:12589
+}
