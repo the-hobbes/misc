@@ -1,0 +1,41 @@
+# Some python tricks and hints
+
+"*" in "def f(*a):"
+f takes an arbitrary number of (positional) arguments, which are available in a as a list.
+
+"*" in "v = f(*a)"
+a must be a list, whose members are used as arguments to f.
+
+"**" in "def f(**a):"
+f takes an arbitrary number of keyword arguments, which are available in a as a dictionary.
+
+"**" in "v = f(**a)"
+a must be a dictionary, whose members are used as keyword arguments to f. f must take only keyword arguments.
+
+"r" in "r'a\n'"
+Raw string (no escaping is performed). The string contains the characters "a", "\", "n".
+
+"u" in "u'a\n'"
+Unicode string.
+
+"[]" vs "{}" vs "()"
+Empty array, empty dictionary, empty tuple.
+
+"()" vs "(,)" vs "(v)" vs "(v,)"
+"()" is an empty tuple. "(,)" is a syntax error. "(v)" is equivalent to "v". "(v,)" is a tuple with one element, v.
+
+"range()" vs "xrange()"
+range produces a list; xrange produces an iterator. Use xrange when iterating over a potentially large range to avoid materializing it as a list.
+
+"re.match()" vs "re.search()"
+re.match is anchored at the beginning of the string.
+
+re.match(foo) is equivalent to re.search("^" + foo)
+"try:... except:..." vs "try:... finally:..."
+The except: block only runs if an exception occurred in the try: block; the finally: block always runs on any exit (normal or exceptional) from the try: block.
+
+"a = b" vs "a = b[:]" How do you tell which was used?
+"a = b" makes a refer to the same object as b.
+
+"a = b[:]" only works if b is a list (or implements getslice or getitem for slice objects), and copies the list into a.
+To tell them apart, use the is operator: "a is b".
