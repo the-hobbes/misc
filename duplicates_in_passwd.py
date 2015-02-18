@@ -2,6 +2,10 @@
 
 '''
   Search for and print all entries in /etc/passwd with duplicate uuids.
+  - read in the file
+  - sort the file based on uuid
+  - loop through the file and print duplicates when found (compare current and previous item in the loop to determine 
+    duplication)
 '''
 
 import sys

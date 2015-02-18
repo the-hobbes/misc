@@ -38,6 +38,9 @@ def locate_processes(target_process):
 
   process_directories = subprocess.Popen(['ls', BASE_DIR], stdout=subprocess.PIPE)
 
+  # ANOTHER note: instead of looping through directories at all, we could just use ps to return a set of processes
+  # proc = subprocess.Popen(['ps', '-e', '-o', 'pid,ppid,command'], stdout=subprocess.PIPE)
+
   for directory in process_directories.stdout:
     directory = directory.strip()
     out = subprocess.Popen(['cat', BASE_DIR + directory + STAT], stdout=subprocess.PIPE, stderr=subprocess.PIPE)

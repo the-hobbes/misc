@@ -12,7 +12,8 @@ frankfurter kielbasa pancetta meatloaf. Cow landjaeger pork belly, rump pork cho
 spare ribs ground round meatball, filet mignon bresaola rump andouille ribeye landjaeger. Short loin venison frankfurter, pork loin \
 ribeye ham beef ribs corned beef chicken andouille sausage."
 
-import re
+import re # for naive version
+from collections import Counter # for smart version
 
 def naive_version(text):
   '''Bad for big files.'''
@@ -30,8 +31,6 @@ def naive_version(text):
   # sort the dictionary by values, from largest to smallest, and print the top 10
   print sorted(wc_dictionary.values(), reverse=True)[:10]
 
-from collections import Counter
-
 def smart_version(text):
   '''
       Better for big files: doesn't require reading the entire file to memory.
@@ -40,7 +39,7 @@ def smart_version(text):
   c = Counter()
   for line in text.splitlines():
     c.update(line.split())
-  print(c)
+  print c
 
 def main():
   naive_version(txt)
