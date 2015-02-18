@@ -121,7 +121,12 @@ def get_processes():
 			process_directories.append(int(line))
 		except Exception, e: # ignore non-integers, as they aren't processes
 			continue
-		
+	
+	# Another note: Instead of crawling the numerical directories in /proc/, you could just run the following:
+	# ps -e -o pid,ppid,command
+	# which would give you the processes pid,  ppid, and command path
+	# so, something like:
+	# proc = subprocess.Popen(['ps', '-e', '-o', 'pid,ppid,command'], stdout=subprocess.PIPE)
 
 	return process_directories
 
