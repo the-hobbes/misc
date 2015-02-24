@@ -101,8 +101,10 @@ def calculate_palindrome(input_text):
 			second_half = input_text[middle:]
 
 		operation_count = count_operations(first_half, second_half)
+		
 		if operation_count < 0:
-		# if the op count is a negative number, then we have to change the first half to make the palindrome, not the second
+			# if the op count is a negative number, then we have to change the first half to make the palindrome, 
+			# not the second
 			operation_count = count_operations(second_half, first_half)
 
 	return operation_count
