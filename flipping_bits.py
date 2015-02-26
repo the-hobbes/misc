@@ -51,17 +51,20 @@ def read_input():
 
 	return formatted_input
 
-def flip_bits(formatted_input):
-	bit_flipped_representation = None
-	
+def flip_bits(formatted_input):	
 	for number in formatted_input:
+		bit_flipped_string = ''
 		integer_number = int(number)
-		# convert number to binary, bin()
+		# convert number to binary representation, and save in a string
 		binary_number = '{0:032b}'.format(integer_number)
-		# change all ones to zeros, and vice-versa
-		# convert number back to an integer
-		# print the number
-	return bit_flipped_representation
+		for character in binary_number: # flip the 1's and 0's
+			if character == '1':
+				bit_flipped_string += '0'
+			else:
+				bit_flipped_string += '1'
+
+		# cast the string into an int, from base 2 (binary)
+		print int(bit_flipped_string, 2) # int(string or number, base)
 
 def main():
 	formatted_input = read_input()
