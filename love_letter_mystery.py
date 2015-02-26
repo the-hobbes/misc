@@ -56,6 +56,7 @@
 import sys
 
 def get_input():
+	# get dat input
 	input_text = []
 	for line in sys.stdin:
 		line = line.strip()
@@ -74,8 +75,13 @@ def count_operations(first_half, second_half):
 	'''
 	total_operations = 0
 	reverse_first_half = first_half[::-1]
+
 	for i in range(len(second_half)):
-		letter_difference = ord(second_half[i]) - ord(reverse_first_half[i])
+		if ord(second_half[i]) < ord(reverse_first_half[i]): # handle the possibility of either being bigger
+			letter_difference = ord(reverse_first_half[i]) - ord(second_half[i])
+		else:
+			letter_difference = ord(second_half[i]) - ord(reverse_first_half[i])
+
 		total_operations += letter_difference
 
 	return total_operations
@@ -115,4 +121,7 @@ def main():
 		print calculate_palindrome(line)
 
 if __name__ == '__main__':
+	''' Run like so:
+		cat love_input_output/input | ./love_letter_mystery.py
+	'''
 	main()
