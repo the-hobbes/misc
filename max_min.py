@@ -26,9 +26,14 @@
 # 	return min_diff
 
 def compute_min_diff(n, k, candies):
+	'''
+		You can profile your program by doing something like this:
+			cat sample_input | python -m cProfile max_min.py
+		to identify the bottlenecks.
+	'''
 	min_diff = None
 
-	for i in range(len(candies)):
+	for i in range(n):
 		subgroup = candies[i: i + k]
 		if len(subgroup) ==  k:
 			diff = subgroup[-1] - subgroup[0] # since list is sorted, max is last element and min is first
