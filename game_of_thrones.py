@@ -27,39 +27,29 @@
 	forward.
 '''
 
-def check_palindrome(string):
-	# check to see if a given string is a palindrome
-	if string == string[::-1]:
+from itertools import permutations # using itertools permutations library
+
+def check_palindrome(input_string):
+	# check to see if a given input_string is a palindrome
+	if input_string == input_string[::-1]:
 		return True
 
 	return False
 
-def check_anagram(string):
-	# find all possible anagrams, by generating all permutations of the given string
-
-	from itertools import permutations # using itertools permutations library
-	all_permutations = [''.join(perm) for perm in permutations(string)] # join the tuples returned into a list
-
-	return all_permutations
-
-def find_palindrome(string):
-
-	# find all permutations (all possible anagrams)
-	all_permutations = check_anagram(string)
-	print all_permutations
-	# determine if any permutation is a palindrome
-	for item in all_permutations:
-		contains_palindrome = check_palindrome(item)
+def find_palindrome(input_string):
+	# determine if any anagram (permutation of the input_string) is a palindrome. 
+	for permutation in set(permutations(input_string)):
+		contains_palindrome = check_palindrome(permutation) # check if a given anagram is a palindrome
 		if contains_palindrome:
-			return True
+			return True # exit quickly if we find a match
 
 	return False
 
 def main():
-	string = raw_input()
+	input_string = raw_input()
 	found = False
 
-	found = find_palindrome(string)
+	found = find_palindrome(input_string)
 
 	if found:
 		print 'YES'
