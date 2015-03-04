@@ -33,12 +33,10 @@ def compute_min_diff(n, k, candies):
 	'''
 	min_diff = None
 
-	for i in range(n):
-		subgroup = candies[i: i + k]
-		if len(subgroup) ==  k:
-			diff = subgroup[-1] - subgroup[0] # since list is sorted, max is last element and min is first
-			if not min_diff or diff < min_diff:
-				min_diff = diff
+	for i in range(n - k):
+		diff = candies[(i+k)-1] - candies[i] # since list is sorted, max is last element and min is first
+		if not min_diff or diff < min_diff:
+			min_diff = diff
 
 	return min_diff
 
