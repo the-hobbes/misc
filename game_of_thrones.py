@@ -27,24 +27,29 @@
 	forward.
 '''
 
-from itertools import permutations # using itertools permutations library
-
-def check_palindrome(input_string):
-	# check to see if a given input_string is a palindrome by reversing and comparing
-	return input_string == input_string[::-1]
+from collections import Counter
 
 def find_palindrome(input_string):
-	# determine if any anagram (permutation of the input_string) is a palindrome. 
-	for permutation in set(permutations(input_string)):
-		if check_palindrome(permutation): # check if a given anagram is a palindrome
-			return True # exit quickly if we find a match
+	'''
+		determine if any anagram (permutation of the input_string) is a palindrome by counting the number of
+		times each letter occurs. A palindrome will have either all even occurences of letters, or all even 
+		occurences and one odd occurence. 
 
-	return False
+		Thus, if more than 1 odd occurence is located, the string isn't a palindrome.
+	'''
+	odd_counts = 0
+	c = Counter(input_string)
+	
+	for key in c:
+		if c[key] % 2 == 1: # check if a count is odd
+			odd_counts += 1 # if it is, increment the number of odd counts we've seen
+			if odd_counts > 1: # if we've seen more than one, the input string isn't a palindrome
+				return False
+
+	return True # the input string is a palindrome
 
 def main():
 	input_string = raw_input()
-	found = False
-
 	found = find_palindrome(input_string)
 
 	if found:
