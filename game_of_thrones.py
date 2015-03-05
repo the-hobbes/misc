@@ -30,17 +30,13 @@
 from itertools import permutations # using itertools permutations library
 
 def check_palindrome(input_string):
-	# check to see if a given input_string is a palindrome
-	if input_string == input_string[::-1]:
-		return True
-
-	return False
+	# check to see if a given input_string is a palindrome by reversing and comparing
+	return input_string == input_string[::-1]
 
 def find_palindrome(input_string):
 	# determine if any anagram (permutation of the input_string) is a palindrome. 
 	for permutation in set(permutations(input_string)):
-		contains_palindrome = check_palindrome(permutation) # check if a given anagram is a palindrome
-		if contains_palindrome:
+		if check_palindrome(permutation): # check if a given anagram is a palindrome
 			return True # exit quickly if we find a match
 
 	return False
