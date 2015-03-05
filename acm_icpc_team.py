@@ -35,39 +35,40 @@
 
 import itertools
 
-# def person_comparer(person_1, person_2):
-# 	# perform bitwise-or on two people, and return an integer array of the result
-# 	comparison = []
-# 	for i in range(len(person_1)):
-# 		comparison.append( int(person_1[i]) | int(person_2[i]) ) # bitwise OR
+def person_comparer(person_1, person_2):
+	# perform bitwise-or on two people, and return an integer array of the result
+	comparison = []
+	for i in range(len(person_1)):
+		comparison.append( int(person_1[i]) | int(person_2[i]) ) # bitwise OR
 
-# 	return comparison
+	return comparison
 
-def sum_string(string):
-	return sum(int(character) for character in string if character.isdigit())
+# def sum_string(string):
+# 	return sum(int(character) for character in string if character.isdigit())
 
-def find_max_topics(n, m, people):
-	# find the maximum number of topics a 2 person team can know
-	topics_known = {}
-	max_value = 0
+def find_max_knowledge(n, m, people):
+	teams = {}
+	for item in itertools.combinations(people, 2):
+		teams[item] = person_comparer(item[0], item[1])
 
-	for person in people: # dict of the string representing the person and the value of their known topics
-		topics_known[person] = sum_string(person)
-		if (topics_known[person] > max_value and topics_known[person] <= m):
-			max_value = topics_known[person]
+	# determine the max knowledge value
+	max_knowledge = 0
+	team_values = {}
+	for team in teams:
+		combined_knowledge = sum(teams[team])
+		team_values[team] = combined_knowledge
+		if combined_knowledge >= max_knowledge:
+			max_knowledge = combined_knowledge
+	
+	print max_knowledge
+	# determine how many teams have that max knowledge
+	
+	top_teams = 0
+	for team in team_values:
+		if team_values[team] == max_knowledge:
+			top_teams += 1
 
-
-	for item in itertools.combinations(topics_known, 2): # go through every combination of 2 people
-		print item
-
-
-	# TODO(pheven): calculate the maximum possible value of any two teams, and then find all the teams 
-	# with that value.
-
-
-def find_top_teams():
-	# find the number of teams that know the maximum number of topics
-	pass
+	print top_teams
 
 def main():
 	first_line = raw_input()
@@ -77,7 +78,7 @@ def main():
 
 	people = [raw_input() for _ in range(0,n)]
 	
-	find_max_topics(n, m, people)
+	find_max_knowledge(n, m, people)
 	
 
 if __name__ == '__main__':
