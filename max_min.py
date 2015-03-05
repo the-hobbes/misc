@@ -8,23 +8,6 @@
 		max(k1, k2, ... k) - min(k1, k2, ... k)
 '''
 
-# NOTE: This solution is incredibly slow and unnecessary
-# def compute_min_diff(n, k, candies):
-# 	# for every three possible combination of numbers in candies, compute the min diff. 
-# 	# save only the smallest min diff
-# 	min_diff = None
-
-# 	# yay for itertools, saving us from k nested loops
-# 	from itertools import combinations
-# 	all_combinations = set(combinations(candies, k))
-
-# 	for combo in all_combinations:
-# 		diff = max(combo) - min(combo)
-# 		if not min_diff or diff < min_diff:
-# 			min_diff = diff
-
-# 	return min_diff
-
 def compute_min_diff(n, k, candies):
 	'''
 		You can profile your program by doing something like this:
@@ -34,8 +17,8 @@ def compute_min_diff(n, k, candies):
 	min_diff = None
 
 	for i in range(n - k):
-		diff = candies[(i+k)-1] - candies[i] # since list is sorted, max is last element and min is first
-		if not min_diff or diff < min_diff:
+		diff = candies[(i + k) - 1] - candies[i] # since list is sorted, max is last element and min is first
+		if min_diff == None or diff < min_diff: # mindiff == none because python treats 0 as false
 			min_diff = diff
 
 	return min_diff
