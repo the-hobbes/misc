@@ -35,18 +35,15 @@
 
 import itertools
 
-def person_comparer(person_1, person_2):
-	# perform bitwise-or on two people, and return an integer array of the result
-	comparison = []
-	for i in range(len(person_1)):
-		comparison.append( int(person_1[i]) | int(person_2[i]) ) # bitwise OR
-
-	return comparison
-
 # def sum_string(string):
 # 	return sum(int(character) for character in string if character.isdigit())
 
+def person_comparer(person_1, person_2):
+	# perform bitwise-or on two people, and return an integer array of the result
+	return [int(a) | int(b) for a,b in itertools.izip(person_1, person_2)]
+	
 def find_max_knowledge(n, m, people):
+	# compute bitwise comparison of every pair of teams
 	teams = {}
 	for item in itertools.combinations(people, 2):
 		teams[item] = person_comparer(item[0], item[1])
@@ -60,15 +57,16 @@ def find_max_knowledge(n, m, people):
 		if combined_knowledge >= max_knowledge:
 			max_knowledge = combined_knowledge
 	
-	print max_knowledge
+	return max_knowledge, team_values
+
+def find_top_teams(max_knowledge, team_values):
 	# determine how many teams have that max knowledge
-	
 	top_teams = 0
 	for team in team_values:
 		if team_values[team] == max_knowledge:
 			top_teams += 1
 
-	print top_teams
+	return top_teams
 
 def main():
 	first_line = raw_input()
@@ -78,7 +76,11 @@ def main():
 
 	people = [raw_input() for _ in range(0,n)]
 	
-	find_max_knowledge(n, m, people)
+	max_knowledge, team_values = find_max_knowledge(n, m, people)
+	top_teams = find_top_teams(max_knowledge, team_values)
+
+	print max_knowledge
+	print top_teams
 	
 
 if __name__ == '__main__':
