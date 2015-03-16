@@ -5,15 +5,15 @@
 '''
 
 def do_work(n, m, operations):
-	candy_jars = [0] * n
+	candy_jars = [long(0)] * n
 	
 	for operation in operations:
 		low = operations[operation][0]
 		high = operations[operation][1]
 		value = operations[operation][2]
 
-		for i in range(int(low) - 1, int(high)):
-			candy_jars[i] += int(value)
+		for i in range(long(low) - 1, long(high)):
+			candy_jars[i] += long(value)
 
 	print sum(candy_jars) / n
 
