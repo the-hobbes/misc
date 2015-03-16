@@ -4,24 +4,19 @@
 	https://www.hackerrank.com/challenges/filling-jars
 '''
 
+import sys
+
 def main():
-	first_line = raw_input()
-	first_line = first_line.split(' ')
-	n = int(first_line[0]) # the number of empty candy jars (bins)
-	m = int(first_line[1]) # the number of operations  to be performed
+	# map the call to int() to the result of the call to split, for the two values in the first line of input
+	n, m = map(int, sys.stdin.readline().split())
 
 	total = 0
-	for operation in range(m):
-		try:
-			a, b, k = raw_input().split(' ') # a=low index, b=high index, k=value
-			a = int(a)
-			b = int(b)
-			k = int(k)
-			# fill each of the spots between b and a with the k value.
-			total = total + (b - a + 1) * k
-		except EOFError:
-			break # end of file
-
+	for _ in range(m):
+		# do that same map, but for three items split instead of two
+		a, b, k = map(int, sys.stdin.readline().split())
+		# fill each of the spots between b and a with the k value.
+		total = total + (b - a + 1) * k
+		
 	print total / n # average!
 
 if __name__ == '__main__':
