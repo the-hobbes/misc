@@ -11,7 +11,7 @@ def main():
 	m = int(first_line[1]) # the number of operations  to be performed
 
 	total = 0
-	for operation in range(n):
+	for operation in range(m):
 		try:
 			a, b, k = raw_input().split(' ') # a=low index, b=high index, k=value
 			a = int(a)
