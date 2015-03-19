@@ -7,14 +7,11 @@
 import sys, math
 
 if __name__ == '__main__':
-	T = map(int, sys.stdin.readline().strip())[0]
+	T = map(int, sys.stdin.readline().split())[0]
 
 	for _ in range(T):
 		# do work
-		square_count = 0
-		point_a, point_b = map(int, sys.stdin.readline().split())
-		# square_count += math.sqrt(number).is_integer()
-		for number in range(point_a, point_b + 1):
-			square_count += math.sqrt(number).is_integer()
+		low, high = map(int, sys.stdin.readline().split())
 
-		print square_count
+		count_squares = int( math.floor(math.sqrt(high)) - math.ceil(math.sqrt(low)) + 1)
+		print count_squares
