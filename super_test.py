@@ -4,8 +4,10 @@ class LoggingDict(dict):
   '''
     def __setitem__(self, key, value):
       '''
-        After making a log entry, the method uses super() to delegate the work 
-            for actually updating the dictionary with the key/value pair.
+         This class has all the capabilities of a regular dict, but it also 
+          prints a little message. It then uses super() to delegate the work for
+          actually updating the dictionary with the key/value pair back to the 
+          class that was subclassed.
       '''
       print 'I\'ve extended a builtin! (in this case dict)'
       try:
