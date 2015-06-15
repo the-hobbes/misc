@@ -1,0 +1,2 @@
+# search for a single phrase/word pattern in a set of files
+grep -PR '\bfindme\b' path/to/files
