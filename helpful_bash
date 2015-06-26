@@ -1,2 +1,5 @@
 # search for a single phrase/word pattern in a set of files
 grep -PR '\bfindme\b' path/to/files
+# search for processes bound to a specific port:
+sudo lsof -i :5381
+
