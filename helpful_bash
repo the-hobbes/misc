@@ -2,4 +2,5 @@
 grep -PR '\bfindme\b' path/to/files
 # search for processes bound to a specific port:
 sudo lsof -i :5381
-
+# open a document in the default web browser:
+xdg-open some.document.here.html
