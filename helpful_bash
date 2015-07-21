@@ -1,6 +1,17 @@
 # search for a single phrase/word pattern in a set of files
 grep -PR '\bfindme\b' path/to/files
+
 # search for processes bound to a specific port:
 sudo lsof -i :5381
+
 # open a document in the default web browser:
 xdg-open some.document.here.html
+
+# convert epoch timestamp to human readable one:
+date -d @TIMESTAMP
+
+# choose a random element from a list:
+python -c 'import sys; import random; print random.choice(sys.argv[1:])' $(expn some_list)
+
+# another way to choose a random element from a list
+expn some_list | shuf -n 1
