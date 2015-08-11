@@ -18,3 +18,6 @@ expn some_list | shuf -n 1
 
 # remove preceeding whitespace from all lines in a file:
 sed -i 's/ //g' /tmp/some_file.txt
+
+# convert lines in a file from hex to decimal (works on many other formats too)
+tail ~/tmp/hex-ids.txt | awk -F, '{printf "%d\n", strtonum("0x"$1)}' > decimal-ids.txt
