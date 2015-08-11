@@ -21,3 +21,9 @@ sed -i 's/ //g' /tmp/some_file.txt
 
 # convert lines in a file from hex to decimal (works on many other formats too)
 tail ~/tmp/hex-ids.txt | awk -F, '{printf "%d\n", strtonum("0x"$1)}' > decimal-ids.txt
+
+# combine a bunch of files into one: 
+for i in /home/docs/text/*; do cat $i >> bigfile; done
+
+# compare two files
+comm -23 /tmp/validated-users.txt /tmp/users-copied.txt > comparison.txt
