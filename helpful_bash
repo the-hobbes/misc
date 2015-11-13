@@ -27,3 +27,12 @@ for i in /home/docs/text/*; do cat $i >> bigfile; done
 
 # compare two files
 comm -23 /tmp/validated-users.txt /tmp/users-copied.txt > comparison.txt
+
+# apply a command to the output of each line from another command, in a while loop
+while read -r line; do p4 revert "$line"; done < <(p4 status)
+
+# trim off the last 31 characters of $line
+$ while read -r line
+> do
+> p4 revert ${line::-31}
+> done < <(p4 status)
