@@ -19,6 +19,12 @@ expn some_list | shuf -n 1
 # remove preceeding whitespace from all lines in a file:
 sed -i 's/ //g' /tmp/some_file.txt
 
+# remove all characters after a certain word in a string (AFTERHERE in this case)
+sed -i "s/ AFTERHERE.*/ /" path/to/some/file
+
+# replace characters in-place
+sed -i 's/original/replacement/g' path/to/some/file
+
 # convert lines in a file from hex to decimal (works on many other formats too)
 tail ~/tmp/hex-ids.txt | awk -F, '{printf "%d\n", strtonum("0x"$1)}' > decimal-ids.txt
 
