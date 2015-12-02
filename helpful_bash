@@ -42,3 +42,7 @@ $ while read -r line
 > do
 > p4 revert ${line::-31}
 > done < <(p4 status)
+
+# show processes pid along with name and other info. output format:
+# PID  PPID  PGID   SID COMMAND
+ps  xao pid,ppid,pgid,sid,comm | grep somename
