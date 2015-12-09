@@ -46,3 +46,7 @@ $ while read -r line
 # show processes pid along with name and other info. output format:
 # PID  PPID  PGID   SID COMMAND
 ps  xao pid,ppid,pgid,sid,comm | grep somename
+
+# diagnose network issues w/mtr. note that "c" is optional, and specifies packets sent. more is better to show
+# severity of issues.
+mtr -rwc 100 target
