@@ -1,0 +1,52 @@
+# search for a single phrase/word pattern in a set of files
+grep -PR '\bfindme\b' path/to/files
+
+# search for processes bound to a specific port:
+sudo lsof -i :5381
+
+# open a document in the default web browser:
+xdg-open some.document.here.html
+
+# convert epoch timestamp to human readable one:
+date -d @TIMESTAMP
+
+# choose a random element from a list:
+python -c 'import sys; import random; print random.choice(sys.argv[1:])' $(expn some_list)
+
+# another way to choose a random element from a list
+expn some_list | shuf -n 1
+
+# remove preceeding whitespace from all lines in a file:
+sed -i 's/ //g' /tmp/some_file.txt
+
+# remove all characters after a certain word in a string (AFTERHERE in this case)
+sed -i "s/ AFTERHERE.*/ /" path/to/some/file
+
+# replace characters in-place
+sed -i 's/original/replacement/g' path/to/some/file
+
+# convert lines in a file from hex to decimal (works on many other formats too)
+tail ~/tmp/hex-ids.txt | awk -F, '{printf "%d\n", strtonum("0x"$1)}' > decimal-ids.txt
+
+# combine a bunch of files into one: 
+for i in /home/docs/text/*; do cat $i >> bigfile; done
+
+# compare two files
+comm -23 /tmp/validated-users.txt /tmp/users-copied.txt > comparison.txt
+
+# apply a command to the output of each line from another command, in a while loop
+while read -r line; do p4 revert "$line"; done < <(p4 status)
+
+# trim off the last 31 characters of $line
+$ while read -r line
+> do
+> p4 revert ${line::-31}
+> done < <(p4 status)
+
+# show processes pid along with name and other info. output format:
+# PID  PPID  PGID   SID COMMAND
+ps  xao pid,ppid,pgid,sid,comm | grep somename
+
+# diagnose network issues w/mtr. note that "c" is optional, and specifies packets sent. more is better to show
+# severity of issues.
+mtr -rwc 100 target
