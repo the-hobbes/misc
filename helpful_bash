@@ -53,3 +53,6 @@ ps  xao pid,ppid,pgid,sid,comm | grep somename
 # diagnose network issues w/mtr. note that "c" is optional, and specifies packets sent. more is better to show
 # severity of issues.
 mtr -rwc 100 target
+
+# cut out values from a file, then output them to another file, then use awk to sum them
+cat input.txt | grep lacks | cut -d' ' -f 40 > values && awk '{ sum += $1 } END { print sum }' values
