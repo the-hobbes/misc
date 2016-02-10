@@ -59,3 +59,9 @@ cat input.txt | grep lacks | cut -d' ' -f 40 > values && awk '{ sum += $1 } END 
 
 # diff two files and write an html file containing the results of the diff
 gvim -d $FILE1 $FILE2 -c "colorscheme zellner" -c TOhtml -c "w! /tmp/html_diff" -c q! -c q! -c q! 2> /dev/null
+
+# print dateMonthYear
+date +"%d%h%k"
+
+# print timestamp
+date +"%T"
