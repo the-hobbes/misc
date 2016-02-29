@@ -66,3 +66,7 @@ date +"%d%h%k"
 
 # print timestamp
 date +"%T"
+
+# flatten a log file into a count of issues by subject
+# count uniq, reverse numeric sort
+grep "\tcom.google.calendar"  ~/Downloads/calendar.log.WARNING | sort | uniq -c | sort -nr
