@@ -123,6 +123,17 @@ def mac_address():
 	''' match MAC addresses'''
 	pass
 
+def capture_group():
+  # example of using python regex to pull out the matching group
+  re.search(r'.*(web|batch|api).*\.frontend', 'prod-web-canary.frontend')
+  # results in an _sre.SRE_Match object
+  result = re.search(r'.*(web|batch|api).*\.frontend', 'prod-web-canary.frontend')
+  result.group
+  # yields 'prod-web-canary.frontend
+  result.group(1)
+  # yields 'web', from the first matching capture group
+
+
 def main():
 	# run each of the following matching functions
 	shell_comments()
