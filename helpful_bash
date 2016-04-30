@@ -1,6 +1,6 @@
 # search for a single phrase/word pattern in a set of files
-grep -PR '\bfindme\b' path/to/files
-grep -PR '\bfindme\b' *
+grep -pR '\bfindme\b' path/to/files
+grep -pR '\bfindme\b' *
 
 # search for processes bound to a specific port:
 sudo lsof -i :5381
