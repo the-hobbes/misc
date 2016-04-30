@@ -70,3 +70,17 @@ date +"%T"
 # flatten a log file into a count of issues by subject
 # count uniq, reverse numeric sort
 grep "\tcom.google.calendar"  ~/Downloads/calendar.log.WARNING | sort | uniq -c | sort -nr
+
+# To find the sum of individual group records
+$ awk -F, '{a[$1]+=$2;}END{for(i in a)print i", "a[i];}' filename
+Item1, 800
+Item2, 1300
+Item3, 900
+
+# find out what is setting your $PATH variable
+grep --color -H 'PATH=' ~/.bashrc ~/.profile ~/.bash_profile ~/bash.login \
+                     ~/.bash_aliases /etc/bash.bashrc /etc/profile \
+                     /etc/profile.d/* /etc/environment 2> /dev/null
+
+# loop through items in a list
+for i in {1,2,3}; do echo $i; done
