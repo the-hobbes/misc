@@ -84,3 +84,6 @@ grep --color -H 'PATH=' ~/.bashrc ~/.profile ~/.bash_profile ~/bash.login \
 
 # loop through items in a list
 for i in {1,2,3}; do echo $i; done
+
+# looks for somestring in a file, finds anything that matches 'something' in the output (between quotes), then removes quotes with tr
+cat some/file | grep "somestring" | grep -Po "'.*?'" | tr -d "'"
