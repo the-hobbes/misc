@@ -1,0 +1,69 @@
+generated with:
+$ sudo tcpdump -n port 80 # to listen to tcp traffic on port 80
+# to generate traffic on port 80
+$ printf 'HEAD / HTTP/1.1\r\nHost: example.net\r\n\r\n' | nc example.net 80
+
+
+tcpdump: data link type PKTAP
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on pktap, link-type PKTAP (Packet Tap), capture size 262144 bytes
+20:31:57.014640 IP 192.168.0.106.58680 > 93.184.216.34.80: Flags [S], seq 3640431232, win 65535, options [mss 1460,nop,wscale 5,nop,nop,TS val 1147341812 ecr 0,sackOK,eol], length 0
+20:31:57.039719 IP 93.184.216.34.80 > 192.168.0.106.58680: Flags [S.], seq 1848887095, ack 3640431233, win 65535, options [mss 1460,sackOK,TS val 2324434623 ecr 1147341812,nop,wscale 9], length 0
+20:31:57.039762 IP 192.168.0.106.58680 > 93.184.216.34.80: Flags [.], ack 1, win 4117, options [nop,nop,TS val 1147341837 ecr 2324434623], length 0
+20:31:57.039881 IP 192.168.0.106.58680 > 93.184.216.34.80: Flags [P.], seq 1:39, ack 1, win 4117, options [nop,nop,TS val 1147341837 ecr 2324434623], length 38: HTTP: HEAD / HTTP/1.1
+20:31:57.039905 IP 192.168.0.106.58680 > 93.184.216.34.80: Flags [F.], seq 39, ack 1, win 4117, options [nop,nop,TS val 1147341837 ecr 2324434623], length 0
+20:31:57.059189 IP 93.184.216.34.80 > 192.168.0.106.58680: Flags [.], ack 39, win 283, options [nop,nop,TS val 2324434631 ecr 1147341837], length 0
+20:31:57.059226 IP 192.168.0.106.58680 > 93.184.216.34.80: Flags [F.], seq 39, ack 1, win 4117, options [nop,nop,TS val 1147341856 ecr 2324434631], length 0
+20:31:57.059352 IP 93.184.216.34.80 > 192.168.0.106.58680: Flags [P.], seq 1:341, ack 40, win 283, options [nop,nop,TS val 2324434631 ecr 1147341837], length 340: HTTP: HTTP/1.1 200 OK
+20:31:57.059381 IP 192.168.0.106.58680 > 93.184.216.34.80: Flags [.], ack 341, win 4107, options [nop,nop,TS val 1147341856 ecr 2324434631], length 0
+20:31:57.075132 IP 93.184.216.34.80 > 192.168.0.106.58680: Flags [F.], seq 341, ack 40, win 283, options [nop,nop,TS val 2324434631 ecr 1147341837], length 0
+20:31:57.075135 IP 93.184.216.34.80 > 192.168.0.106.58680: Flags [.], ack 40, win 283, options [nop,nop,TS val 2324434634 ecr 1147341856,nop,nop,sack 1 {39:40}], length 0
+20:31:57.075203 IP 192.168.0.106.58680 > 93.184.216.34.80: Flags [.], ack 342, win 4107, options [nop,nop,TS val 1147341871 ecr 2324434631], length 0
+
+Analysis
+
+- source > destination
+- length field is the length of the payload. For most of the packets, there is
+no payload so the length value is 0. The only one w/a length value is 38, which
+is exactly how many bytes were in the http request on line 4. 
+- seq (the sequence number) is the tcp sequence number that the protocol uses 
+to order packets received. They start at a random number, which is why they are
+all crazy here.
+- Flags tells you which flags, or control bits, are set on the tcp packet. There
+are 6 basic ones:
+SYN (synchronize) [S] — This packet is opening a new TCP session and contains a new initial sequence number.
+FIN (finish) [F] — This packet is used to close a TCP session normally. The sender is saying that they are finished sending, but they can still receive data from the other endpoint.
+PSH (push) [P] — This packet is the end of a chunk of application data, such as an HTTP request.
+RST (reset) [R] — This packet is a TCP error message; the sender has a problem and wants to reset (abandon) the session.
+ACK (acknowledge) [.] — This packet acknowledges that its sender has received data from the other endpoint. Almost every packet except the first SYN will have the ACK flag set.
+URG (urgent) [U] — This packet contains data that needs to be delivered to the application out-of-order. Not used in HTTP or most other current applications.
+- Three-way handshake
+The first packet sent to initiate a TCP session always has the SYN flag set. This initial SYN packet is what a client sends to a server to start opening a TCP connection. This is the first packet you see in the sample tcpdump data, with Flags [S]. This packet also contains a new, randomized sequence number (seq in tcpdump output).
+If the server accepts the connection, it sends a packet back that has the SYN and ACK flags, and acknowledges the initial SYN. This is the second packet in the sample data, with Flags [S.]. This contains a different initial sequence number.
+(If the server doesn't want to accept the connection, it may not send anything at all. Or it may send a packet with the RST flag.)
+Finally, the client acknowledges receiving the SYN|ACK packet by sending an ACK packet of its own.
+This exchange of three packets is usually called the TCP three-way handshake. In addition to sequence numbers, the two endpoints also exchange other information used to set up the connection.
+- Four-way teardown
+When either endpoint is done sending data into the connection, it can send a FIN packet to indicate that it is finished. The other endpoint will send an ACK to indicate that it has received the FIN.
+In the example HTTP data, the client sends its FIN first, as soon as it is done sending the HTTP request. This is the first packet containing Flags [F.].
+Eventually the other endpoint will be done sending as well, and will send a FIN of its own. Then the first endpoint will send an ACK.
+- In between
+In a long-running connection, there will be many packets exchanged back and forth. Some of them will contain application data; others may be only acknowledgments with no data (length 0). However, all TCP packets in a connection except the initial SYN will contain an acknowledgment of all the data that the sender has received so far. Therefore, they will all have the ACK flag set. (This is why tcpdump depicts the ACK flag with just a dot: it's really common.)
+- ICMP and UDP don't have TCP flags
+If you look at tcpdump data for pings or basic DNS lookups, you will not see flags. This is because ping uses ICMP, and basic DNS lookups use UDP. These protocols do not have TCP flags or sequence numbers.
+Visualizing TCP congestion control
+- setup:
+$ sudo tcpdump -n port 12345
+$ nc www.udacity.com 12345
+# use tcpdump to display traffic to an arbitrary port nuber, then use nc to try
+and open a connection to a real host that doesn't have that port open.
+- you see
+tcpdump shows several packets sent to that host, but slower and slower. Then,
+after a long delay, nc will exit.
+- this demonstrates the exponential backoff algorthim that tcp flow control uses
+to prevent a slow connection from causing a link to get saturated by not replying
+to packets in a timely manner and having the router buffers get full and everything
+locking up.
+- if it takes too long, tcp will timeout and close the connection
+
+
