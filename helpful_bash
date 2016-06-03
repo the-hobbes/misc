@@ -87,3 +87,13 @@ for i in {1,2,3}; do echo $i; done
 
 # looks for somestring in a file, finds anything that matches 'something' in the output (between quotes), then removes quotes with tr
 cat some/file | grep "somestring" | grep -Po "'.*?'" | tr -d "'"
+
+# watch traffic sent to host (8.8.8.8 in this example) w/tcp dump
+sudo tcpdump -n host 8.8.8.8
+# watch dns traffic (port 53) 
+sudo tcpdump -n port 53
+# watch web traffic (port 80), shows metadata from headers of the tcp packets
+sudo tcpdump -n port 80
+
+# send a web request using netcat (and printf to send the http header)
+printf 'HEAD / HTTP/1.1\r\nHost: example.net\r\n\r\n' | nc example.net 80
