@@ -100,3 +100,9 @@ printf 'HEAD / HTTP/1.1\r\nHost: example.net\r\n\r\n' | nc example.net 80
 
 # kill the last process executed in the background. '$!' expands to its pid
 kill $!
+
+# how long does a given command take to run?
+$ time longrunningcommand --takeyourtime
+
+# use system time instead:
+$ /usr/bin/time longrunningcommand --getsomecoffee
