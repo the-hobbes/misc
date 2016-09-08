@@ -106,3 +106,6 @@ $ time longrunningcommand --takeyourtime
 
 # use system time instead:
 $ /usr/bin/time longrunningcommand --getsomecoffee
+
+# use dig to enumerate the list of dns servers for a record from the root
+$ dig +trace gmail.fr
