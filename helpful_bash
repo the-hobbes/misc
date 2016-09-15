@@ -109,3 +109,8 @@ $ /usr/bin/time longrunningcommand --getsomecoffee
 
 # use dig to enumerate the list of dns servers for a record from the root
 $ dig +trace gmail.fr
+
+# kick other users off the machine who are ssh'ed in
+$ ps aux | egrep "sshd: [a-zA-Z]+@"
+# second column gives you the PID. Then do:
+$ sudo kill [-9] PID
