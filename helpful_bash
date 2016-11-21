@@ -114,3 +114,6 @@ $ dig +trace gmail.fr
 $ ps aux | egrep "sshd: [a-zA-Z]+@"
 # second column gives you the PID. Then do:
 $ sudo kill [-9] PID
+
+# display word differences between text files (the -3 means exclude common words from the output)
+$ wdiff -3 text/file/1 text/file/2
