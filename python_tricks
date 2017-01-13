@@ -39,3 +39,7 @@ The except: block only runs if an exception occurred in the try: block; the fina
 
 "a = b[:]" only works if b is a list (or implements getslice or getitem for slice objects), and copies the list into a.
 To tell them apart, use the is operator: "a is b".
+
+# including or executing the contents of a python script of file in the python interpreter:
+exec(open("./path/to/script.py").read(), globals())
+# don't forget to include the other imports that the script or snippet depends on, if they aren't already included by the script.
