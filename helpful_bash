@@ -26,6 +26,13 @@ sed -i "s/ AFTERHERE.*/ /" path/to/some/file
 # replace characters in-place
 sed -i 's/original/replacement/g' path/to/some/file
 
+# sed command to find and replace calendar/{api,batch,web}/qa with calendar/{api,batch,web}/qa0 in a single file 
+# using extended regex.
+sed -i -E "s/calendar\/(api|batch|web)\/qa\b/calendar\/\1\/qa0/" some/file/here
+
+# sed commands to find and replace "qa" with "qa0" in all files in the somedir directory
+find dir/called/somdedir/ -type f | xargs sed -i -E "s/\"qa\"/\"qa0\"/"
+
 # convert lines in a file from hex to decimal (works on many other formats too)
 tail ~/tmp/hex-ids.txt | awk -F, '{printf "%d\n", strtonum("0x"$1)}' > decimal-ids.txt
 
