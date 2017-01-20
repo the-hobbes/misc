@@ -124,3 +124,7 @@ $ sudo kill [-9] PID
 
 # display word differences between text files (the -3 means exclude common words from the output)
 $ wdiff -3 text/file/1 text/file/2
+
+# run a command in every subdirectory in a directory
+# this particular one runs git diff to check if there are uncommited changes in a bunch of repos.
+$ for d in */; do (echo "========$d=======" && cd "$d" && git diff); done | less
