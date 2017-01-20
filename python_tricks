@@ -43,3 +43,8 @@ To tell them apart, use the is operator: "a is b".
 # including or executing the contents of a python script of file in the python interpreter:
 exec(open("./path/to/script.py").read(), globals())
 # don't forget to include the other imports that the script or snippet depends on, if they aren't already included by the script.
+
+# to write 'test' to a file called 'file' from the python interpreter:
+import sys
+sys.stdout = open('file', 'w')
+print 'test'
