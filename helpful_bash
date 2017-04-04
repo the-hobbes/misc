@@ -128,3 +128,7 @@ $ wdiff -3 text/file/1 text/file/2
 # run a command in every subdirectory in a directory
 # this particular one runs git diff to check if there are uncommited changes in a bunch of repos.
 $ for d in */; do (echo "========$d=======" && cd "$d" && git diff); done | less
+
+# send 'yes' or 'y' to stdout forever (can be modified to send other strings too)
+$ yes
+$ yes n  # sends n to stdout forever
