@@ -9,17 +9,18 @@ import bs4
 import threading
 
 
-url = 'http://xkcd.com' # starting url
+path = 'xkcd'
 
 try:
-  os.makedirs('xkcd') # store comics in ./xkcd
+  os.makedirs(path) # store comics in ./xkcd
 except OSError as exc:
-  if exc.errno == errno.EEXIST and os.path.isdir(path):
+  if exc.errno == 17 and os.path.isdir(path):
     pass
   else:
     raise
 
 def downloadXkcd(start_comic, end_comic):
+  url = 'http://xkcd.com' # starting url
   for url_number in range(start_comic, end_comic):
     # Download the page.
     print('Downloading page %s...' % url_number)
