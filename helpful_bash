@@ -132,3 +132,6 @@ $ for d in */; do (echo "========$d=======" && cd "$d" && git diff); done | less
 # send 'yes' or 'y' to stdout forever (can be modified to send other strings too)
 $ yes
 $ yes n  # sends n to stdout forever
+
+# Create a bunch of files for testing purposes.
+for i in {1..2}; do echo "" > page$i.htm; done
