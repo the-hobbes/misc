@@ -135,3 +135,9 @@ $ yes n  # sends n to stdout forever
 
 # Create a bunch of files for testing purposes.
 for i in {1..2}; do echo "" > page$i.htm; done
+
+# Interact w/gmail smtp server from the command line using openssl
+openssl s_client -connect smtp.gmail.com:465
+HELO localhost
+...
+
