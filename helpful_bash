@@ -144,3 +144,5 @@ openssl s_client -connect smtp.gmail.com:465
 HELO localhost
 ...
 
+# munpack can be used to unpack a MIME-encoded message into its consitituent parts
+munpack -t original_msg.eml 
