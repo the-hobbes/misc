@@ -1,4 +1,7 @@
 import math, argparse
+'''
+   alias sizer='python ~/Repositories/misc/sizer.py'
+'''
 
 def convert_size(size_bytes):
    if size_bytes == 0:
