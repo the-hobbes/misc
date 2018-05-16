@@ -146,3 +146,9 @@ HELO localhost
 
 # munpack can be used to unpack a MIME-encoded message into its consitituent parts
 munpack -t original_msg.eml 
+
+# rename all files in a directory sequentially (blah.derp -> 1.jpg)
+ls | cat -n | while read n f; do mv $f $n.jpg; done
+
+# Follow CNAME record to find the canonical A record
+dig -t cname +short policies.google.com
