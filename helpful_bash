@@ -11,6 +11,9 @@ xdg-open some.document.here.html
 # convert epoch timestamp to human readable one:
 date -d @TIMESTAMP
 
+# convert microseconds epoch timestamp to human readable one:
+date -d @$(echo $((1532101481563131/1000000)))
+
 # choose a random element from a list:
 python -c 'import sys; import random; print random.choice(sys.argv[1:])' $(expn some_list)
 
