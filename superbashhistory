@@ -1,0 +1,200 @@
+# Super History Begin
+
+# Put this into your bashrc.
+# The gist of it is that it adds itself to PROMPT_COMMAND, which is an env var 
+# that gets run every time bash reconstructs your prompt. It will create some 
+# dirs and put your history into them, split by host and tmux and all kinds of 
+# weird stuff.
+
+# To use it you run "hs <regex>" or "hss <regex>"  I believe the former is for 
+# the current session and the latter is for all time, or something.
+
+#   TODO:
+#     - associate with tmux session and window name
+#         tmux list-panes -a | grep ${TMUX_PANE}
+#     - track pwd
+#     - color code PROMPT based on previous result
+
+#   ensure directory for history files exists
+basehistorydirectory=${HOME}/.superbashhistory
+historydirectory=${basehistorydirectory}/${HOSTNAME}
+rawhistorydirectory=${basehistorydirectory}/${HOSTNAME}/raw
+if [ ! -r ${rawhistorydirectory} ]
+then
+  mkdir -p ${rawhistorydirectory}
+fi
+#   ensure history directory is readable by only me
+chmod 700 ${basehistorydirectory}
+chmod 700 ${historydirectory}
+chmod 700 ${rawhistorydirectory}
+#   Remember everything
+export HISTCONTROL=
+export HISTIGNORE=
+export HISTFILESIZE=
+export HISTSIZE=
+#   Remember when it was done
+export SUPERHISTORY_TIMEFORMAT='%F %T'
+export HISTTIMEFORMAT="${SUPERHISTORY_TIMEFORMAT} "
+export OSTYPE_GENERALIZED="linux"
+
+#   append to the file
+shopt -s histappend
+# READLINE
+##   show modified history lines
+#shopt -s mark-modified-lines
+#   save multiline history on one line.
+shopt -s cmdhist
+
+#   the last thing is naming the file to start memory
+#   if not in tmux, then just use session id
+if [ -z ${TMUX} ]
+then
+  if [ -z ${BASHPID} ]
+  then
+    sessionid=$$
+  else
+    sessionid=${BASHPID}
+  fi
+else
+  sessionid=tmux.${TMUX_PANE}
+fi
+# changed to use RAW on 2012-03-19
+#  if all sessions have been restarted, then move stuff from main directory to
+#  raw directory
+export HISTFILE=${rawhistorydirectory}/${sessionid}
+
+export SUPERHISTORY_FIRSTCOMMAND=1
+# capture the previous working directory to get things started
+# so that it can be used in the log for first command
+export SUPERHISTORY_PREVIOUS_PWD=${PWD}
+function processHistory()
+{
+  # capture the status
+  lastResult=$?
+  export SUPERHISTORY_LAST_RESULT=${lastResult}
+
+  # get the start time of the last command
+  previousCommandStartTime
+
+  # if first time through, don't bother
+  # Need to add test to supress empty line return
+  if [ ${SUPERHISTORY_FIRSTCOMMAND} -ne 0 -o "${SUPERHISTORY_LAST_STARTTIME}" == "" ]
+  then
+    export SUPERHISTORY_FIRSTCOMMAND=0
+    return
+  fi
+
+  # capture the end time
+  export SUPERHISTORY_LAST_ENDTIME=$(date +%s)
+  export SUPERHISTORY_LAST_ELAPSEDTIME=$(( ${SUPERHISTORY_LAST_ENDTIME} \
+    - ${SUPERHISTORY_LAST_STARTTIME} ))
+
+  writeLogEntry
+
+  # capture the previous working directory
+  # so that it can be used in the log in the future
+  export SUPERHISTORY_PREVIOUS_PWD=${PWD}
+}
+
+function previousCommand()
+{
+  local sedargs='-r'
+  if [ ${OSTYPE_GENERALIZED} == "darwin" ]
+  then
+    sedargs='-E'
+  fi
+  history 1 | sed ${sedargs} -e 's!^ *[0-9]+ +[0-9-]+ +[0-9:]+ +!!g'
+}
+
+function previousCommandStartTime()
+{
+  local histtimeformat=${HISTTIMEFORMAT}
+  # create a history format that yields a timestamp
+  export HISTTIMEFORMAT='%s '
+  export SUPERHISTORY_LAST_STARTTIME=$(history 1 | awk -F " " '{print $2;}')
+  export HISTTIMEFORMAT=${histtimeformat}
+#  echo ${SUPERHISTORY_LAST_STARTTIME}
+}
+
+# adjust this for number of lines after "command"
+# must be external in case it is used prior to being exported
+export SUPERHISTORY_RECORD_LENGTH=6
+export SUPERHISTORY_COMMAND_PREFIX="command: "
+
+function writeLogEntry()
+{
+  local superHistoryLogFile=${historydirectory}/$(date +"%Y.%W")
+  if [ ! -r ${superHistoryLogFile} ]
+  then
+    touch ${superHistoryLogFile}
+    chmod 600 ${superHistoryLogFile}
+  fi
+
+  local entry="----------\n"
+  entry="${entry}${SUPERHISTORY_COMMAND_PREFIX}$(previousCommand)\n"
+  entry="${entry}  start: ${SUPERHISTORY_LAST_STARTTIME} ($(timestampToReadable ${SUPERHISTORY_LAST_STARTTIME}))\n"
+  entry="${entry}    end: ${SUPERHISTORY_LAST_ENDTIME} ($(timestampToReadable ${SUPERHISTORY_LAST_ENDTIME}))\n"
+  entry="${entry}elapsed: ${SUPERHISTORY_LAST_ELAPSEDTIME} ($(formatElapsedTime ${SUPERHISTORY_LAST_ELAPSEDTIME}))\n"
+  entry="${entry} status: ${SUPERHISTORY_LAST_RESULT}\n"
+  entry="${entry}user/hn: ${USER}/${HOSTNAME}\n"
+  entry="${entry}    pwd: ${SUPERHISTORY_PREVIOUS_PWD}\n"
+
+  # hack around IFS collapsing spaces to preserve formatting
+  local ifs=${IFS}
+  export IFS="
+"
+  echo -e ${entry} >> $superHistoryLogFile
+  export IFS=${ifs}
+}
+
+function timestampToReadable()
+{
+  local ts=$1
+  if [ "${OSTYPE_GENERALIZED}" == "linux" ]
+  then
+    date -d @$ts +"${SUPERHISTORY_TIMEFORMAT}"
+  elif [ "${OSTYPE_GENERALIZED}" == "darwin" ]
+  then
+    date -r $ts +"${SUPERHISTORY_TIMEFORMAT}"
+  else
+    echo "timestampToReadable: unknown OS"
+  fi
+}
+
+function formatElapsedTime()
+{
+  local elapsedTime=$1
+  local hours=$(( ${elapsedTime} / 3600 ))
+  local minutes=$(( (${elapsedTime} - (${hours} * 60)) / 60 ))
+  local seconds=$(( ${elapsedTime} % 60 ))
+  printf "%d:%02d:%02d" $hours $minutes $seconds
+}
+
+function hs()
+{
+  local pattern=$(echo "${@/#/.*}" | sed 's/ //g')
+  # consider filtering out previous 'hs' queries as they are noisesome
+  grep -Eh -A ${SUPERHISTORY_RECORD_LENGTH} \
+      "^${SUPERHISTORY_COMMAND_PREFIX}${pattern}" ${historydirectory}/* \
+      | less +G
+}
+
+function hss()
+{
+  local pattern=$(echo "${@/#/.*}" | sed 's/ //g')
+  # consider filtering out previous 'hs' queries as they are noisesome
+  grep -R -Eh -A ${SUPERHISTORY_RECORD_LENGTH} \
+      "^${SUPERHISTORY_COMMAND_PREFIX}${pattern}" ${basehistorydirectory}/* \
+      | less +G
+}
+
+#function testExpand()
+#{
+#  echo "${@/#/.*}" | sed 's/ //g'
+#}
+
+#   process after every command
+#   prevent loss by committing after every command
+export PROMPT_COMMAND='processHistory;history -w'
+
+# Super History End
