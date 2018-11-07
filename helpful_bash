@@ -155,3 +155,6 @@ ls | cat -n | while read n f; do mv $f $n.jpg; done
 
 # Follow CNAME record to find the canonical A record
 dig -t cname +short policies.google.com
+
+# Treat a string as a file using echo
+pastebin <(echo "somestring as a file")
