@@ -158,3 +158,8 @@ dig -t cname +short policies.google.com
 
 # Treat a string as a file using echo
 pastebin <(echo "somestring as a file")
+
+# Discover what is using UDP ports on a machine
+netstat -aunp | awk 'NR > 2 {print $NF}' | sort | uniq -c | sort -n
+# Then, take those PIDs and resolve them
+ps u $PID1 $PID2 ...
