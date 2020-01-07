@@ -1,7 +1,7 @@
 def ShardList(list_to_shard, total_shards, shard_idx):
   """Return a sublist of elements based on total shards desired and the shard index.
 
-  ShardModules breaks the list of alert modules into total_shards sublists,
+  ShardList breaks the list of elements into total_shards sublists,
   then returns the sublist corresponding to the shard. Use this to split a
   list into an equal number of parts which are consistent each time the
   function is called.
@@ -12,7 +12,7 @@ def ShardList(list_to_shard, total_shards, shard_idx):
     shard_idx (int): the config shard these elements should be selected for.
 
   Returns:
-    split_lists (list): the sublist of alert modules that should be installed
+    split_lists (list): the sublist of elements that should be installed
     for the provided config shard.
   """
   length = len(list_to_shard)
