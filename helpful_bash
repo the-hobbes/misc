@@ -169,7 +169,16 @@ ps u $PID1 $PID2 ...
 sed -i '/Thing\sOne/,/^@Template/{/^@Template/!d;}' somefile.txt
 sed -r -i '/\|\sGroupBy\(\[\]\,/,/sampling_threshold\=None\)/{d}' somefile.txtpi
 
-Current date in epoch format:
+# Current date in epoch format:
 date +%s
 Date 8 hours ago in epoch format:
 date -d '8 hours ago' +%s
+
+# Loop through files and get the file size from each, printing a message if it exceeds a threshold
+for line in /some/location/*;
+  do
+    fsize=$(stat -c%s "$line")
+      if [ "$fsize" -gt 10501609 ]; then
+        echo "$line is too big"
+      fi
+  done
