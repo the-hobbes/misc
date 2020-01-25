@@ -182,3 +182,6 @@ for line in /some/location/*;
         echo "$line is too big"
       fi
   done
+
+# find and kill all instances of a given process
+for id in $(ps aux | grep $PROCESS | grep -v grep | awk '{print $2}'); do kill -9 $id; done
